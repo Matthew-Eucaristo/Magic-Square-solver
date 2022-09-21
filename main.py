@@ -1,40 +1,33 @@
-from itertools import combinations_with_replacement
-import random
+from itertools import combinations_with_replacement, permutations
 from functools import cache
+import itertools
 
 
 @cache
 def main():
     n = int(input('masukkan n: '))
-    max_jawaban = int(input('Masukkan max jawaban: '))
     magic_table: list = []
 
     kump_angka = [x for x in range(1, n*n+1)]
 
     kumpulan_jawaban: list = []
-    while True:
-        temp_kumpulan_angka = kump_angka.copy()
+    for combo in itertools.permutations(kump_angka):
         magic_table = []
-        for i in range(n):
+
+        index = 0
+        for _ in range(n):
             temp = []
-            for j in range(n):
-                index = random.randint(0, len(temp_kumpulan_angka) - 1)
-                temp.append(temp_kumpulan_angka[index])
-                temp_kumpulan_angka.pop(index)
+            for _ in range(n):
+                temp.append(combo[index])
+                index += 1
             magic_table.append(temp)
 
         if cek(magic_table):
             print(magic_table)
             kumpulan_jawaban.append(magic_table)
 
-        if len(kumpulan_jawaban) > max_jawaban:
-            print('total penyelesaian: ')
-
-            res = []
-            [res.append(x) for x in kumpulan_jawaban if x not in res]
-
-            print(len(res))
-            break
+    print('total penyelesaian: ')
+    print(len(kumpulan_jawaban))
 
 
 def cek(table):
